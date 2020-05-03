@@ -1,17 +1,20 @@
 package Commands;
+import Msg.MessageToServer;
 import Route.MyCollection;
+import Route.Route;
 
 public class CountLessThanDistanceCommand implements Command {
 
     MyCollection myCollection;
     String arg;
+    Route newRoute;
 
-    public void execute() {
-        try{
-            myCollection.countLessThanDistance(arg);
-        }catch (NumberFormatException e) {
-            System.out.println("\nWrong format of distance, please enter your command again!");
-        }
+    public MessageToServer execute() throws NumberFormatException {
+        MessageToServer msg = new MessageToServer();
+        msg.setStr(myCollection.countLessThanDistance(arg));
+        return msg;
+        //"\nWrong format of distance, please enter your command again!";
+
     }
 
     public void setMyCollection(MyCollection myCollection) {
@@ -28,6 +31,14 @@ public class CountLessThanDistanceCommand implements Command {
 
     public String getArg() {
         return arg;
+    }
+
+    public void setNewRoute(Route newRoute) {
+        this.newRoute = newRoute;
+    }
+
+    public Route getNewRoute() {
+        return newRoute;
     }
 
 }

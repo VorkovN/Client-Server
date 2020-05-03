@@ -1,14 +1,18 @@
 package Commands;
 import Route.MyCollection;
+import Msg.MessageToServer;
+import Route.Route;
 
 public class AddCommand implements Command{
 
     MyCollection myCollection;
     String arg;
+    Route newRoute;
 
-    public void execute() {
-        myCollection.add();
-        System.out.println("Route.Route was added to list");
+    public MessageToServer execute() {
+        MessageToServer msg = new MessageToServer();
+        msg.setStr(myCollection.add(newRoute));
+        return msg;
     }
 
     public void setMyCollection(MyCollection myCollection) {
@@ -25,6 +29,14 @@ public class AddCommand implements Command{
 
     public String getArg() {
         return arg;
+    }
+
+    public void setNewRoute(Route newRoute) {
+        this.newRoute = newRoute;
+    }
+
+    public Route getNewRoute() {
+        return newRoute;
     }
 
 }

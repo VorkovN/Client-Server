@@ -1,13 +1,18 @@
 package Commands;
+import Msg.MessageToServer;
 import Route.MyCollection;
+import Route.Route;
 
 public class ExecuteScriptCommand implements Command {
 
     MyCollection myCollection;
     String arg;
+    Route newRoute;
 
-    public void execute(){
-        myCollection.executeScript(arg);
+    public MessageToServer execute() {
+        MessageToServer msg = new MessageToServer();
+        //myCollection.executeScript(arg);
+        return msg;
     }
 
     public void setMyCollection(MyCollection myCollection) {
@@ -24,6 +29,14 @@ public class ExecuteScriptCommand implements Command {
 
     public String getArg() {
         return arg;
+    }
+
+    public void setNewRoute(Route newRoute) {
+        this.newRoute = newRoute;
+    }
+
+    public Route getNewRoute() {
+        return newRoute;
     }
 
 }

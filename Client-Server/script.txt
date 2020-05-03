@@ -1,0 +1,6 @@
+info
+execute_script script.txt
+execute_script sc.txt
+execute_script sc.txt
+execute_script sc.txt
+

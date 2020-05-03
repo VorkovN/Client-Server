@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 
 public class Client {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         MyCollection myCollection = new MyCollection();
 
 

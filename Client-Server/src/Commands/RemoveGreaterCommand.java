@@ -1,21 +1,21 @@
 package Commands;
 import Exceptions.NonexistentArgumentException;
+import Msg.MessageToServer;
 import Route.MyCollection;
+import Route.Route;
 
 public class RemoveGreaterCommand implements Command {
 
     MyCollection myCollection;
     String arg;
+    Route newRoute;
 
-    public void execute() {
-        try{
-            myCollection.removeGreater(arg);
-            System.out.println("Removed");
-        }catch (NonexistentArgumentException e){
-            System.out.println("\nNonexistent argument id, please enter your command again!");
-        }catch (NumberFormatException e) {
-            System.out.println("\nWrong format of id, please enter your command again!");
-        }
+    public MessageToServer execute() throws NonexistentArgumentException, NumberFormatException {
+        MessageToServer msg = new MessageToServer();
+        msg.setStr(myCollection.removeGreater(arg));
+        return msg;
+        //"\nNonexistent argument id, please enter your command again!";
+        //"\nWrong format of id, please enter your command again!";
     }
 
     public void setMyCollection(MyCollection myCollection) {
@@ -32,5 +32,13 @@ public class RemoveGreaterCommand implements Command {
 
     public String getArg() {
         return arg;
+    }
+
+    public void setNewRoute(Route newRoute) {
+        this.newRoute = newRoute;
+    }
+
+    public Route getNewRoute() {
+        return newRoute;
     }
 }

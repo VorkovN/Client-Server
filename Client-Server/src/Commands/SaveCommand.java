@@ -1,14 +1,18 @@
 package Commands;
+import Msg.MessageToServer;
 import Route.MyCollection;
+import Route.Route;
 
 public class SaveCommand implements Command {
 
     MyCollection myCollection;
     String arg;
+    Route newRoute;
 
-    public void execute() {
-        myCollection.save();
-        System.out.println("Saved");
+    public MessageToServer execute() {
+        MessageToServer msg = new MessageToServer();
+        msg.setStr(myCollection.save());
+        return msg;
     }
 
     public void setMyCollection(MyCollection myCollection) {
@@ -25,5 +29,13 @@ public class SaveCommand implements Command {
 
     public String getArg() {
         return arg;
+    }
+
+    public void setNewRoute(Route newRoute) {
+        this.newRoute = newRoute;
+    }
+
+    public Route getNewRoute() {
+        return newRoute;
     }
 }

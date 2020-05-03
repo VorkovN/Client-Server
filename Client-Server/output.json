@@ -1,1 +1,2 @@
-{"distance":46.0,"Coordinates":{"x":32.54,"y":14.56},"name":"FunnyRoad","Location1":{"xl1":332,"zl1":148,"yl1":145.26},"id":0,"Location2":{"yl2":145.26,"namel2":"Perm","xl2":332}}
+{"Route.Location1":{"xl1":332,"zl1":148,"yl1":145.26},"distance":46.0,"name":"FunnyRoad","id":0,"Route.Location2":{"yl2":145.26,"namel2":"Perm","xl2":332},"Route.Coordinates":{"x":32.54,"y":14.56}}
+{"Route.Location1":{"xl1":14,"zl1":16,"yl1":15.0},"distance":99999.0,"name":"Perm","id":1,"Route.Location2":{"yl2":18.0,"namel2":"Moscow","xl2":17},"Route.Coordinates":{"x":12.0,"y":13.0}}

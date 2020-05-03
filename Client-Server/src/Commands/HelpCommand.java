@@ -1,13 +1,18 @@
 package Commands;
+import Msg.MessageToServer;
 import Route.MyCollection;
+import Route.Route;
 
 public class HelpCommand implements Command {
 
     MyCollection myCollection;
     String arg;
+    Route newRoute;
 
-    public void execute() {
-        myCollection.help();
+    public MessageToServer execute() {
+        MessageToServer msg = new MessageToServer();
+        msg.setStr(myCollection.help());
+        return msg;
     }
 
     public void setMyCollection(MyCollection myCollection) {
@@ -24,5 +29,13 @@ public class HelpCommand implements Command {
 
     public String getArg() {
         return arg;
+    }
+
+    public void setNewRoute(Route newRoute) {
+        this.newRoute = newRoute;
+    }
+
+    public Route getNewRoute() {
+        return newRoute;
     }
 }

@@ -1,7 +1,6 @@
 package Route;
 import Client.CommandExecutor;
 import Exceptions.NonexistentArgumentException;
-import Exceptions.UnacceptableNumberException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -9,12 +8,11 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class MyCollection implements Serializable {
 
     private ArrayList<Route> arr = new ArrayList<Route>();
-    private ArrayList<String> scripts =new ArrayList<String>();
+    private ArrayList<String> scripts = new ArrayList<String>();
 
     public MyCollection() {
         Route newRoute = new Route();
@@ -45,8 +43,8 @@ public class MyCollection implements Serializable {
         }
     }
 
-    public void help() {
-        System.out.println("help : вывести справку по доступным командам \n" +
+    public String help() {
+        return "help : вывести справку по доступным командам \n" +
                 "info : вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.) \n" +
                 "show : вывести в стандартный поток вывода все элементы коллекции в строковом представлении \n" +
                 "add {element} : добавить новый элемент в коллекцию \n" +
@@ -61,61 +59,56 @@ public class MyCollection implements Serializable {
                 "remove_all_by_distance distance : удалить из коллекции все элементы, значение поля distance которого эквивалентно заданному \n" +
                 "count_less_than_distance distance : вывести количество элементов, значение поля distance которых меньше заданного \n" +
                 "filter_greater_than_distance distance : вывести элементы, значение поля distance которых больше заданного \n" +
-                "exit : завершить программу (без сохранения в файл) \n");
+                "exit : завершить программу (без сохранения в файл) \n";
 
     }
 
     ;
 
-    public void info() throws IndexOutOfBoundsException {
-        System.out.println("type: Roue\n"
+    public String info() throws IndexOutOfBoundsException {
+        return "type: Roue\n"
                 + "Дата инициализации: " + arr.get(0).getDate() + '\n'
-                + "Количество элементов: " + arr.size());
+                + "Количество элементов: " + arr.size();
     }
 
-    public void show() {
+    public String show() {
+        StringBuilder s = new StringBuilder();
         for (Route route : arr) {
-            System.out.println(route);
+            s.append(route.toString()).append("\n");
         }
+        return s.toString();
     }
 
-    public void add() {
-        try {
-            Route newRoute = initialization();
-            arr.add(newRoute);
-        } catch (NumberFormatException e) {
-            System.out.println("\nWrong input, please enter your values again!");
-            add();
-        }
+    public String add(Route newRoute) {
+        newRoute.setId(arr.size());
+        arr.add(newRoute);
+        return "Input your values";
     }
 
-    public void update(String arg) throws NumberFormatException, NonexistentArgumentException {
+    public String update(Route newRoute,String arg) throws NumberFormatException, NonexistentArgumentException {
         int id = Integer.parseInt(arg);
         if (id > arr.size() - 1) {
             throw new NonexistentArgumentException();
         }
-        try {
-            Route newRoute = initialization();
             arr.set(id, newRoute);
-        } catch (NumberFormatException e) {
-            System.out.println("\nWrong input, please enter your values again!");
-            add();
-        }
+        return "Input your values";
     }
 
-    public void removeById(String arg) throws NumberFormatException, NonexistentArgumentException {
+    public String removeById(String arg) throws NumberFormatException, NonexistentArgumentException {
         int id = Integer.parseInt(arg);
         if (id > arr.size() - 1) {
             throw new NonexistentArgumentException();
         }
         arr.remove(id);
+        return "Element is removed";
     }
 
-    public void clear() {
+    public String clear() {
         arr.clear();
+        return "List was cleared";
     }
 
-    public void save() {
+    public String save() {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("output.json"))) {
             for (Route route : arr) {
                 JSONObject out = new JSONObject();
@@ -142,16 +135,17 @@ public class MyCollection implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return "Saved";
     }
 
-    public void executeScript(String arg) {
+    public void executeScript(String arg) {//TODO
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(arg))) {
             String line;
             if (!scripts.contains("execute_script " + arg)) {
                 scripts.add("execute_script " + arg);
             }
             while ((line = bufferedReader.readLine()) != null) {
-                if (!line.equals("")){
+                if (!line.equals("")) {
                     System.out.println(">>>" + line);
                 }
                 if (!scripts.contains(line)) {
@@ -163,50 +157,42 @@ public class MyCollection implements Serializable {
                     System.out.println("script " + line + " has already done");
                 }
             }
-            scripts.remove(scripts.size()-1);
+            scripts.remove(scripts.size() - 1);
             System.out.println();
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("File not found, please, input existent file");
         }
     }
 
-
-    public void exit() {
-        System.exit(0);
-    }
-
-    public void removeFirst() throws NonexistentArgumentException {
+    public String removeFirst() throws NonexistentArgumentException {
         if (arr.size() < 1) {
             throw new NonexistentArgumentException();
         }
         arr.remove(0);
+        return "First element is removed";
     }
 
-    public void removeGreater(String arg) throws NumberFormatException, NonexistentArgumentException {
+    public String removeGreater(String arg) throws NumberFormatException, NonexistentArgumentException {
         int id = Integer.parseInt(arg);
         if (id > arr.size() - 1) {
             throw new NonexistentArgumentException();
         }
         arr.subList(id, arr.size()).clear();
-    }
-
-    public void history() {
-        for (int i = 0; i < CommandExecutor.history.size(); i++) {
-            System.out.println(CommandExecutor.history.get(i));
-        }
+        return "Removed";
     }
 
 
-    public void removeAllByDistance(String arg) throws NumberFormatException {
+    public String removeAllByDistance(String arg) throws NumberFormatException {
         int distance = Integer.parseInt(arg);
         for (int i = 0; i < arr.size(); i++) {
             if (arr.get(i).getDistance() == distance) {
                 arr.remove(i);
             }
         }
+        return "Removed";
     }
 
-    public void countLessThanDistance(String arg) throws NumberFormatException {
+    public String countLessThanDistance(String arg) throws NumberFormatException {
         int distance = Integer.parseInt(arg);
         int k = 0;
         for (Route route : arr) {
@@ -214,191 +200,17 @@ public class MyCollection implements Serializable {
                 k++;
             }
         }
-        System.out.println("Число элементов: " + k);
+        return "Number of elements: " + k;
     }
 
-    public void filterGreaterThanDistance(String arg) throws NumberFormatException {
+    public String filterGreaterThanDistance(String arg) throws NumberFormatException {
         int distance = Integer.parseInt(arg);
+        String s = "";
         for (Route route : arr) {
             if (route.getDistance() > distance) {
-                System.out.println(route);
+                s = route.toString() + "\n";
             }
         }
-    }
-
-    public void id(Route newRoute) {
-        newRoute.setId(arr.size());
-        System.out.println("(Integer) id = " + arr.size());
-    }
-
-    public void name(Route newRoute, Scanner sc) {
-        try {
-            System.out.print("(String) name = ");
-            newRoute.setName(sc.nextLine());
-        } catch (NumberFormatException e) {
-            name(newRoute, sc);
-        }
-    }
-
-    public void x(Route newRoute, Scanner sc) {
-        try{
-            System.out.print("(Float) x = ");
-            float x = Float.parseFloat(sc.nextLine());
-            if (!((Float.MIN_VALUE < Math.abs(x)) && (Math.abs(x) < Float.MAX_VALUE))) {
-                x(newRoute, sc);
-                System.out.println("Wrong input");
-            } else {
-                newRoute.setX(x);
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Wrong input");
-            x(newRoute, sc);
-        }
-    }
-
-    public void y(Route newRoute, Scanner sc){
-        try{
-            System.out.print("(Double) y = ");
-            double y = Double.parseDouble(sc.nextLine());
-            if (!((Double.MIN_VALUE < Math.abs(y)) && (Math.abs(y) < Double.MAX_VALUE))) {
-                throw new UnacceptableNumberException();
-            } else {
-                newRoute.setY(y);
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Wrong input");
-            y(newRoute, sc);
-        }
-    }
-
-    public void date(Route newRoute) {
-        LocalDate date = LocalDate.now();
-        newRoute.setDate(date);
-        System.out.println("(LocalDatedate) = " + date);
-    }
-
-    public void xl1(Route newRoute, Scanner sc) {
-        try{
-            System.out.print("(Long) xl1 = ");
-            long xl1 = Long.parseLong(sc.nextLine());
-            if (!((Long.MIN_VALUE < xl1) && (xl1 < Long.MAX_VALUE))) {
-                throw new UnacceptableNumberException();
-            } else {
-                newRoute.setXl1(xl1);
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Wrong input");
-            xl1(newRoute, sc);
-        }
-    }
-
-    public void yl1(Route newRoute, Scanner sc) {
-        try{
-            System.out.print("(Double) yl1 = ");
-            double yl1 = Double.parseDouble(sc.nextLine());
-            if (!((Double.MIN_VALUE < Math.abs(yl1)) && (Math.abs(yl1) < Double.MAX_VALUE))) {
-                throw new UnacceptableNumberException();
-            } else {
-                newRoute.setYl1(yl1);
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Wrong input");
-            yl1(newRoute, sc);
-        }
-    }
-
-    public void zl1(Route newRoute, Scanner sc) {
-        try{
-            System.out.print("(long) zl1 = ");
-            long zl1 = Long.parseLong(sc.nextLine());
-            if (!((Long.MIN_VALUE < zl1) && (zl1 < Long.MAX_VALUE))) {
-                throw new UnacceptableNumberException();
-            } else {
-                newRoute.setZl1(zl1);
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Wrong input");
-            zl1(newRoute, sc);
-        }
-    }
-
-    public void xl2(Route newRoute, Scanner sc) {
-        try{
-            System.out.print("(int) xl2 = ");
-            int xl2 = Integer.parseInt(sc.nextLine());
-            if (!((Integer.MIN_VALUE < xl2) && (xl2 < Integer.MAX_VALUE))) {
-                throw new UnacceptableNumberException();
-            } else {
-                newRoute.setXl2(xl2);
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Wrong input");
-            xl2(newRoute, sc);
-        }
-    }
-
-    public void yl2(Route newRoute, Scanner sc) {
-        try{
-            System.out.print("(Float) yl2 = ");
-            float yl2 = Float.parseFloat(sc.nextLine());
-            if (!((Float.MIN_VALUE < Math.abs(yl2)) && (Math.abs(yl2) < Float.MAX_VALUE))) {
-                throw new UnacceptableNumberException();
-            } else {
-                newRoute.setYl2(yl2);
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Wrong input");
-            yl2(newRoute, sc);
-        }
-    }
-
-    public void namel2(Route newRoute, Scanner sc) {
-        try{
-            System.out.print("(String) namel2 = ");
-            String name = sc.nextLine();
-            if (name.length() > 968) {
-                throw new UnacceptableNumberException();
-            } else {
-                System.out.println(name);
-                newRoute.setNamel2(name);
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Wrong input");
-            namel2(newRoute, sc);
-        }
-    }
-
-    public void distance(Route newRoute, Scanner sc) {
-        try{
-            System.out.print("(float) distance = ");
-            float dist = (Float.parseFloat(sc.nextLine()));
-            if (!((1 < Math.abs(dist)) && (Math.abs(dist) < Float.MAX_VALUE))) {
-                throw new UnacceptableNumberException();
-            } else {
-                newRoute.setDistance(dist);
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Wrong input");
-            distance(newRoute, sc);
-        }
-    }
-
-    public Route initialization() {
-        Route newRoute = new Route();
-        Scanner sc = new Scanner(System.in);
-
-        date(newRoute);
-        id(newRoute);
-        name(newRoute, sc);
-        x(newRoute, sc);
-        y(newRoute, sc);
-        xl1(newRoute, sc);
-        yl1(newRoute, sc);
-        zl1(newRoute, sc);
-        xl2(newRoute, sc);
-        yl2(newRoute, sc);
-        namel2(newRoute, sc);
-        distance(newRoute, sc);
-        return newRoute;
+        return s;
     }
 }
