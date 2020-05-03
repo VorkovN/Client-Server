@@ -1,0 +1,6 @@
+info
+show
+help
+save
+history
+count_less_than_distance 87

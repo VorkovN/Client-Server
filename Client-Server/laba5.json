@@ -1,0 +1,21 @@
+{	
+	"Route": {
+       "id": 32,
+       "name": "FunnyRoad",
+       "Coordinates": {
+			"x": 32.54,
+			"y": 14.56,
+	   },
+	   "Location1": {
+			"xl1": 332,
+			"yl1": 145.26,
+			"zl1": 148,
+	   },
+	   "Location2": {
+			"xl2": 332,
+			"yl2": 145.26,
+			"namel2": "Perm",
+	   },
+		"distance": 46,
+   },
+}
