@@ -1,5 +1,5 @@
-package Client;
-
+package Client;//TODO закинуть эти сраные методы в классы и вызывать как раньше execute экземпляров классов,
+//TODO проверить в execute на одинаковость классов и если все окей, ебашить методы
 import Commands.*;
 import Exceptions.UnacceptableNumberException;
 import Msg.MessageToServer;
@@ -91,30 +91,34 @@ public class CommandExecutor<InputStreamWriter> {
         } else if (actionParts.length == 2) {
             Command command = commands.get(actionParts[0]);
             String arg = actionParts[1];
-            if (command != null) {
-                historyList(actionParts[0]);
-                command.setMyCollection(myCollection);
-                command.setArg(arg);
-                if (actionParts[0].equals("update")){
-                    Route newRoute = null;
-                    try {
-                        newRoute = initialization();
-                    } catch (NumberFormatException e) {
-                        System.out.println("\nWrong input, please enter your values again!");
+            switch (actionParts[0]) {
+                case "execute_script":
+                    executeScript(actionParts[1], myCollection);
+                default:
+                    if (command != null) {
+                        historyList(actionParts[0]);
+                        command.setMyCollection(myCollection);
+                        command.setArg(arg);
+                        if (actionParts[0].equals("update")) {
+                            Route newRoute = null;
+                            try {
+                                newRoute = initialization();
+                            } catch (NumberFormatException e) {
+                                System.out.println("\nWrong input, please enter your values again!");
+                            }
+                            command.setNewRoute(newRoute);
+                        }
+                        toServer.writeObject(command);
+                        command.setArg(null);
+                        System.out.println(((MessageToServer) fromServer.readObject()).getStr());
+                        //command.execute();
+                    } else {
+                        System.out.println("Commands.Command doesn't exist");
                     }
-                    command.setNewRoute(newRoute);
-                }
-                toServer.writeObject(command);
-                command.setArg(null);
-                System.out.println(((MessageToServer)fromServer.readObject()).getStr());
-                //command.execute();
-            } else {
-                System.out.println("Commands.Command doesn't exist");
             }
         } else {
             System.out.println("Wrong command input");
         }
-        System.out.println("done");
     }
 
 
@@ -136,6 +140,33 @@ public class CommandExecutor<InputStreamWriter> {
 
     public void exit() {
         System.exit(0);
+    }
+
+    private ArrayList<String> scripts = new ArrayList<String>();
+    public void executeScript(String arg, MyCollection myCollection) {//TODO
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(arg))) {
+            String line;
+            if (!scripts.contains("execute_script " + arg)) {
+                scripts.add("execute_script " + arg);
+            }
+            while ((line = bufferedReader.readLine()) != null) {
+                if (!line.equals("")) {
+                    System.out.println(">>>" + line);
+                }
+                if (!scripts.contains(line)) {
+                    if (line.split(" ")[0].equals("execute_script")) {
+                        scripts.add(line);
+                    }
+                    CommandExecutor.getCommandExecutor().execute(line, myCollection);
+                } else {
+                    System.out.println("script " + line + " has already done");
+                }
+            }
+            scripts.remove(scripts.size() - 1);
+            System.out.println();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("File not found, please, input existent file");
+        }
     }
 
     public Route initialization() {

@@ -1,4 +1,4 @@
 execute_script script.txt
 info
-save
+
 

@@ -1,5 +1,4 @@
 package Route;
-import Client.CommandExecutor;
 import Exceptions.NonexistentArgumentException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 public class MyCollection implements Serializable {
 
     private ArrayList<Route> arr = new ArrayList<Route>();
-    private ArrayList<String> scripts = new ArrayList<String>();
 
     public MyCollection() {
         Route newRoute = new Route();
@@ -136,32 +134,6 @@ public class MyCollection implements Serializable {
             e.printStackTrace();
         }
         return "Saved";
-    }
-
-    public void executeScript(String arg) {//TODO
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(arg))) {
-            String line;
-            if (!scripts.contains("execute_script " + arg)) {
-                scripts.add("execute_script " + arg);
-            }
-            while ((line = bufferedReader.readLine()) != null) {
-                if (!line.equals("")) {
-                    System.out.println(">>>" + line);
-                }
-                if (!scripts.contains(line)) {
-                    if (line.split(" ")[0].equals("execute_script")) {
-                        scripts.add(line);
-                    }
-                    CommandExecutor.getCommandExecutor().execute(line, this);
-                } else {
-                    System.out.println("script " + line + " has already done");
-                }
-            }
-            scripts.remove(scripts.size() - 1);
-            System.out.println();
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("File not found, please, input existent file");
-        }
     }
 
     public String removeFirst() throws NonexistentArgumentException {
