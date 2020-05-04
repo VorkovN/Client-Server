@@ -1,13 +1,18 @@
 package Commands;
+
+import Msg.MessageToServer;
 import Route.MyCollection;
+import Route.Route;
 
 public class ExitCommand implements Command {
 
     MyCollection myCollection;
     String arg;
+    Route newRoute;
 
-    public void execute() {
-        myCollection.exit();
+    public MessageToServer execute(){
+        System.exit(0);
+        return null;
     }
 
     public void setMyCollection(MyCollection myCollection) {
@@ -26,4 +31,11 @@ public class ExitCommand implements Command {
         return arg;
     }
 
+    public void setNewRoute(Route newRoute) {
+        this.newRoute = newRoute;
+    }
+
+    public Route getNewRoute() {
+        return newRoute;
+    }
 }

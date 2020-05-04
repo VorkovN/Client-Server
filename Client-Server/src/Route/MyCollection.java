@@ -61,8 +61,6 @@ public class MyCollection implements Serializable {
 
     }
 
-    ;
-
     public String info() throws IndexOutOfBoundsException {
         return "type: Roue\n"
                 + "Дата инициализации: " + arr.get(0).getDate() + '\n'
