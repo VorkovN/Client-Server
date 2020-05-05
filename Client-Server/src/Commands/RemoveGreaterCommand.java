@@ -1,5 +1,4 @@
 package Commands;
-import Exceptions.NonexistentArgumentException;
 import Msg.MessageToServer;
 import Route.MyCollection;
 import Route.Route;
@@ -10,12 +9,15 @@ public class RemoveGreaterCommand implements Command {
     String arg = null;
     Route newRoute = null;
 
-    public MessageToServer execute() throws NonexistentArgumentException, NumberFormatException {
+    public MessageToServer execute(){
         MessageToServer msg = new MessageToServer();
-        msg.setStr(myCollection.removeGreater(arg));
-        return msg;
-        //"\nNonexistent argument id, please enter your command again!";
-        //"\nWrong format of id, please enter your command again!";
+        try{
+            msg.setStr(myCollection.removeGreater(arg));
+            return msg;
+        }catch (NumberFormatException | IndexOutOfBoundsException e){
+            msg.setStr("Wrong id, please enter your command again!");
+            return msg;
+        }
     }
 
     public void setMyCollection(MyCollection myCollection) {

@@ -1,5 +1,4 @@
 package Route;
-import Exceptions.NonexistentArgumentException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -89,20 +88,14 @@ public class MyCollection implements Serializable {
         return "Your values saved";
     }
 
-    public String update(Route newRoute,String arg) throws NumberFormatException, NonexistentArgumentException {
+    public String update(Route newRoute,String arg) throws NumberFormatException{
         int id = Integer.parseInt(arg);
-        if (id > arr.size() - 1) {
-            throw new NonexistentArgumentException();
-        }
             arr.set(id, newRoute);
         return "Input your values";
     }
 
-    public String removeById(String arg) throws NumberFormatException, NonexistentArgumentException {
+    public String removeById(String arg) throws NumberFormatException{
         int id = Integer.parseInt(arg);
-        if (id > arr.size() - 1) {
-            throw new NonexistentArgumentException();
-        }
         arr.remove(id);
         return "Element is removed";
     }
@@ -142,19 +135,13 @@ public class MyCollection implements Serializable {
         return "Saved";
     }
 
-    public String removeFirst() throws NonexistentArgumentException {
-        if (arr.size() < 1) {
-            throw new NonexistentArgumentException();
-        }
+    public String removeFirst() throws NumberFormatException {
         arr.remove(0);
         return "First element is removed";
     }
 
-    public String removeGreater(String arg) throws NumberFormatException, NonexistentArgumentException {
+    public String removeGreater(String arg) throws NumberFormatException{
         int id = Integer.parseInt(arg);
-        if (id > arr.size() - 1) {
-            throw new NonexistentArgumentException();
-        }
         arr.subList(id, arr.size()).clear();
         return "Removed";
     }

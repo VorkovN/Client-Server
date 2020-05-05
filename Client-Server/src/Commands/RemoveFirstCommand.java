@@ -1,5 +1,4 @@
 package Commands;
-import Exceptions.NonexistentArgumentException;
 import Msg.MessageToServer;
 import Route.MyCollection;
 import Route.Route;
@@ -10,11 +9,15 @@ public class RemoveFirstCommand implements Command {
     String arg = null;
     Route newRoute = null;
 
-    public MessageToServer execute() throws NonexistentArgumentException {
+    public MessageToServer execute(){
         MessageToServer msg = new MessageToServer();
-        msg.setStr(myCollection.removeFirst());
-        return msg;
-        //e.getMessage();
+        try{
+            msg.setStr(myCollection.removeFirst());
+            return msg;
+        }catch (NumberFormatException | IndexOutOfBoundsException e){
+            msg.setStr("First element doesn't exist");
+            return msg;
+        }
     }
 
     public void setMyCollection(MyCollection myCollection) {

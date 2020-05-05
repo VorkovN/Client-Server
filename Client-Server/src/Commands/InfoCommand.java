@@ -9,11 +9,15 @@ public class InfoCommand implements Command {
     String arg = null;
     Route newRoute = null;
 
-    public MessageToServer execute() throws IndexOutOfBoundsException {
+    public MessageToServer execute(){
         MessageToServer msg = new MessageToServer();
-        msg.setStr(myCollection.info());
-        return msg;
-        //"List doesn't have any elements";
+        try{
+            msg.setStr(myCollection.info());
+            return msg;
+        }catch (NumberFormatException | IndexOutOfBoundsException e){
+            msg.setStr("List doesn't have any elements");
+            return msg;
+        }
     }
 
     public void setMyCollection(MyCollection myCollection) {

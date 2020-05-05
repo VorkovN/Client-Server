@@ -9,12 +9,15 @@ public class CountLessThanDistanceCommand implements Command {
     String arg = null;
     Route newRoute = null;
 
-    public MessageToServer execute() throws NumberFormatException {
+    public MessageToServer execute(){
         MessageToServer msg = new MessageToServer();
-        msg.setStr(myCollection.countLessThanDistance(arg));
-        return msg;
-        //"\nWrong format of distance, please enter your command again!";
-
+        try{
+            msg.setStr(myCollection.countLessThanDistance(arg));
+            return msg;
+        }catch (NumberFormatException | IndexOutOfBoundsException e){
+            msg.setStr("Wrong format of distance, please enter your command again!");
+            return msg;
+        }
     }
 
     public void setMyCollection(MyCollection myCollection) {

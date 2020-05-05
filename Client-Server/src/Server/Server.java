@@ -32,7 +32,7 @@ public class Server {
 
         System.out.println("Server is started");
         while(true){
-            SocketAddress adress = new InetSocketAddress(3345);
+            SocketAddress adress = new InetSocketAddress(2281);
             try(ServerSocketChannel channel = ServerSocketChannel.open()){
                 channel.bind(adress);
                 try(SocketChannel socket = channel.accept();
