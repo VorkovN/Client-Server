@@ -1,2 +1,2 @@
 # Client-Server
-Bad version
+Norm version
