@@ -151,23 +151,12 @@ public class MyCollection implements Serializable {
 
     public String countLessThanDistance(String arg) throws NumberFormatException {
         int distance = Integer.parseInt(arg);
-        /*int k = 0;
-        for (Route route : arr) {
-            if (route.getDistance() < distance) {
-                k++;
-            }
-        }*/
         return "Number of elements: " + arr.stream().filter(route -> route.getDistance() < distance).count();
     }
 
     public String filterGreaterThanDistance(String arg) throws NumberFormatException, NoSuchElementException  {
         int distance = Integer.parseInt(arg);
         StringBuilder s = new StringBuilder();
-        /*for (Route route : arr) {
-            if (route.getDistance() > distance) {
-                s = route.toString() + "\n";
-            }
-        }*/
         arr.stream().filter(route -> route.getDistance() > distance).forEach(route -> s.append(route.toString()).append("\n"));
         return s.toString();
     }
