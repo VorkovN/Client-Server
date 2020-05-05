@@ -153,7 +153,6 @@ public class Initialization {
             if (name.length() > 968) {
                 throw new UnacceptableNumberException();
             } else {
-                System.out.println(name);
                 newRoute.setNamel2(name);
             }
         } catch (NumberFormatException e) {

@@ -5,9 +5,9 @@ import Route.Route;
 
 public class ClearCommand implements Command {
 
-    MyCollection myCollection;
-    String arg;
-    Route newRoute;
+    MyCollection myCollection = null;
+    String arg = null;
+    Route newRoute = null;
 
     public MessageToServer execute() {
         MessageToServer msg = new MessageToServer();

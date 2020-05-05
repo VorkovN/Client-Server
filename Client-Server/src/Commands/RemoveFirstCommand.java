@@ -6,9 +6,9 @@ import Route.Route;
 
 public class RemoveFirstCommand implements Command {
 
-    MyCollection myCollection;
-    String arg;
-    Route newRoute;
+    MyCollection myCollection = null;
+    String arg = null;
+    Route newRoute = null;
 
     public MessageToServer execute() throws NonexistentArgumentException {
         MessageToServer msg = new MessageToServer();

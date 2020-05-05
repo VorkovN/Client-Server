@@ -76,9 +76,17 @@ public class MyCollection implements Serializable {
     }
 
     public String add(Route newRoute) {
+        for (Route route : arr) {
+            System.out.println(route.toString()+"\n");
+        }
+        System.out.println("newRoute: " + newRoute.toString());
         newRoute.setId(arr.size());
         arr.add(newRoute);
-        return "Input your values";
+        System.out.println("newRoute: " + newRoute.toString());
+        for (Route route : arr) {
+            System.out.println(route.toString()+"\n");
+        }
+        return "Your values saved";
     }
 
     public String update(Route newRoute,String arg) throws NumberFormatException, NonexistentArgumentException {

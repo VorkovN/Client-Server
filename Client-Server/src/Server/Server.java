@@ -3,13 +3,16 @@ package Server;
 import Commands.*;
 import Route.MyCollection;
 
-import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 
 public class Server {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-
         MyCollection myCollection = new MyCollection();
 
         HelpCommand helpCommand = new HelpCommand();
@@ -27,12 +30,20 @@ public class Server {
         RemoveAllByDistanceCommand removeAllByDistanceCommand = new RemoveAllByDistanceCommand();
         RemoveFirstCommand removeFirstCommand = new RemoveFirstCommand();
 
-        ServerSocket serverSocket = new ServerSocket(3345);
-        Socket socket = serverSocket.accept();
-        ObjectInputStream fromClient = new ObjectInputStream(socket.getInputStream());
-        ObjectOutputStream toClient = new ObjectOutputStream(socket.getOutputStream());
-        while(true) {
-            toClient.writeObject(((Command) fromClient.readObject()).execute());
+        System.out.println("Server is started");
+        while(true){
+            SocketAddress adress = new InetSocketAddress(3345);
+            try(ServerSocketChannel channel = ServerSocketChannel.open()){
+                channel.bind(adress);
+                try(SocketChannel socket = channel.accept();
+                    ObjectOutputStream toClient = new ObjectOutputStream(socket.socket().getOutputStream());
+                    ObjectInputStream fromClient = new ObjectInputStream(socket.socket().getInputStream())){
+                    Command cmd = (Command) fromClient.readObject();
+                    cmd.setMyCollection(myCollection);
+                    toClient.writeObject(cmd.execute());
+                    //toClient.writeObject(((Command) fromClient.readObject()).execute());
+                }
+            } catch (ClassNotFoundException | IOException ignored) {}
         }
     }
 }

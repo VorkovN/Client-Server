@@ -5,12 +5,13 @@ import Route.Route;
 
 public class AddCommand implements Command{
 
-    MyCollection myCollection;
-    String arg;
-    Route newRoute;
+    MyCollection myCollection = null;
+    String arg = null;
+    Route newRoute = null;
 
     public MessageToServer execute() {
         MessageToServer msg = new MessageToServer();
+        System.out.println(newRoute.getNamel2());
         msg.setStr(myCollection.add(newRoute));
         return msg;
     }

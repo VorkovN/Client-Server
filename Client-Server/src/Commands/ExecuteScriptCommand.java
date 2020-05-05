@@ -11,9 +11,10 @@ import java.util.ArrayList;
 
 public class ExecuteScriptCommand implements Command {
 
-    MyCollection myCollection;
-    String arg = "";
-    Route newRoute;
+    MyCollection myCollection = null;
+    String arg = null;
+    Route newRoute = null;
+
     private ArrayList<String> scripts = new ArrayList<String>();
 
     public MessageToServer execute() {
@@ -31,14 +32,14 @@ public class ExecuteScriptCommand implements Command {
                     if (line.split(" ")[0].equals("execute_script")) {
                         scripts.add(line);
                     }
-                    CommandExecutor.getCommandExecutor().execute(line, myCollection);
+                    CommandExecutor.getCommandExecutor().execute(line);
                 } else {
                     System.out.println("script " + line + " has already done");
                 }
             }
             scripts.remove(scripts.size() - 1);
             System.out.println();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             System.out.println("File not found, please, input existent file");
         }
 

@@ -7,6 +7,11 @@ import Route.Route;
 import java.io.Serializable;
 
 public interface Command extends Serializable {
+
+    String arg = null;
+    Route newRoute = null;
+    MyCollection myCollection = null;
+
     String getArg();
     Route getNewRoute();
     MyCollection getMyCollection();
