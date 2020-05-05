@@ -3,6 +3,8 @@ import Msg.MessageToServer;
 import Route.MyCollection;
 import Route.Route;
 
+import java.util.NoSuchElementException;
+
 public class InfoCommand implements Command {
 
     MyCollection myCollection = null;
@@ -14,7 +16,7 @@ public class InfoCommand implements Command {
         try{
             msg.setStr(myCollection.info());
             return msg;
-        }catch (NumberFormatException | IndexOutOfBoundsException e){
+        }catch (NumberFormatException | IndexOutOfBoundsException | NoSuchElementException e){
             msg.setStr("List doesn't have any elements");
             return msg;
         }

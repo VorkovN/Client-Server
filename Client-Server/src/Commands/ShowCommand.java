@@ -1,7 +1,10 @@
 package Commands;
+
 import Msg.MessageToServer;
 import Route.MyCollection;
 import Route.Route;
+
+import java.util.NoSuchElementException;
 
 public class ShowCommand implements Command {
 
@@ -11,8 +14,13 @@ public class ShowCommand implements Command {
 
     public MessageToServer execute() {
         MessageToServer msg = new MessageToServer();
-        msg.setStr(myCollection.show());
-        return msg;
+        try{
+            msg.setStr(myCollection.show());
+            return msg;
+        }catch (NoSuchElementException e){
+            msg.setStr("List doesn't have any elements");
+            return msg;
+        }
     }
 
     public void setMyCollection(MyCollection myCollection) {

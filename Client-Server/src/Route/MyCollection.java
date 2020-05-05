@@ -1,4 +1,5 @@
 package Route;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -6,6 +7,7 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 public class MyCollection implements Serializable {
 
@@ -60,31 +62,21 @@ public class MyCollection implements Serializable {
 
     }
 
-    public String info() throws IndexOutOfBoundsException {
+    public String info() throws IndexOutOfBoundsException, NoSuchElementException {
         return "type: Roue\n"
-                + "Дата инициализации: " + arr.get(0).getDate() + '\n'
+                + "Дата инициализации: " + arr.get(arr.stream().findFirst().get().getId()).getDate() + '\n'
                 + "Количество элементов: " + arr.size();
     }
 
-    public String show() {
+    public String show() throws NoSuchElementException {
         StringBuilder s = new StringBuilder();
-        for (Route route : arr) {
-            s.append(route.toString()).append("\n");
-        }
+        arr.forEach(route -> s.append(route.toString()).append("\n"));
         return s.toString();
     }
 
     public String add(Route newRoute) {
-        for (Route route : arr) {
-            System.out.println(route.toString()+"\n");
-        }
-        System.out.println("newRoute: " + newRoute.toString());
         newRoute.setId(arr.size());
         arr.add(newRoute);
-        System.out.println("newRoute: " + newRoute.toString());
-        for (Route route : arr) {
-            System.out.println(route.toString()+"\n");
-        }
         return "Your values saved";
     }
 
@@ -136,7 +128,7 @@ public class MyCollection implements Serializable {
     }
 
     public String removeFirst() throws NumberFormatException {
-        arr.remove(0);
+        arr.remove(arr.stream().findFirst().get().getId());
         return "First element is removed";
     }
 
@@ -159,23 +151,24 @@ public class MyCollection implements Serializable {
 
     public String countLessThanDistance(String arg) throws NumberFormatException {
         int distance = Integer.parseInt(arg);
-        int k = 0;
+        /*int k = 0;
         for (Route route : arr) {
             if (route.getDistance() < distance) {
                 k++;
             }
-        }
-        return "Number of elements: " + k;
+        }*/
+        return "Number of elements: " + arr.stream().filter(route -> route.getDistance() < distance).count();
     }
 
-    public String filterGreaterThanDistance(String arg) throws NumberFormatException {
+    public String filterGreaterThanDistance(String arg) throws NumberFormatException, NoSuchElementException  {
         int distance = Integer.parseInt(arg);
-        String s = "";
-        for (Route route : arr) {
+        StringBuilder s = new StringBuilder();
+        /*for (Route route : arr) {
             if (route.getDistance() > distance) {
                 s = route.toString() + "\n";
             }
-        }
-        return s;
+        }*/
+        arr.stream().filter(route -> route.getDistance() > distance).forEach(route -> s.append(route.toString()).append("\n"));
+        return s.toString();
     }
 }

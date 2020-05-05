@@ -55,7 +55,7 @@ public class CommandExecutor<InputStreamWriter> {
 
 
     public void execute(String action) {
-        try(Socket socket = new Socket("helios.cs.ifmo.ru", 2281);
+        try(Socket socket = new Socket("helios.cs.ifmo.ru"/*"localhost"*/, 2281);
             ObjectOutputStream toServer = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream fromServer = new ObjectInputStream(socket.getInputStream())) {
             String[] actionParts = action.split(" ");

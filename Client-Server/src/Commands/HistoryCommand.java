@@ -12,9 +12,7 @@ public class HistoryCommand implements Command {
     Route newRoute = null;
 
     public MessageToServer execute(){
-        for (int i = 0; i < CommandExecutor.history.size(); i++) {
-            System.out.println(CommandExecutor.history.get(i));
-        }
+        CommandExecutor.history.forEach(System.out::println);//redone
         return null;
     }
 

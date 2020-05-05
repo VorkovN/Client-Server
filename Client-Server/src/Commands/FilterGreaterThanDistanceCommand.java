@@ -3,6 +3,8 @@ import Msg.MessageToServer;
 import Route.MyCollection;
 import Route.Route;
 
+import java.util.NoSuchElementException;
+
 public class FilterGreaterThanDistanceCommand implements Command {
 
     MyCollection myCollection = null;
@@ -14,7 +16,7 @@ public class FilterGreaterThanDistanceCommand implements Command {
         try{
             msg.setStr(myCollection.filterGreaterThanDistance(arg));
             return msg;
-        }catch (NumberFormatException | IndexOutOfBoundsException e){
+        }catch (NumberFormatException | IndexOutOfBoundsException | NoSuchElementException e){
             msg.setStr("Wrong format of distance, please enter your command again!");
             return msg;
         }
