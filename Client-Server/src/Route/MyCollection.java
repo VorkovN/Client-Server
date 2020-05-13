@@ -7,11 +7,13 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 public class MyCollection implements Serializable {
 
-    private ArrayList<Route> arr = new ArrayList<Route>();
+    private List<Route> arr = new ArrayList<Route>();
 
     public MyCollection() {
         Route newRoute = new Route();
@@ -88,7 +90,7 @@ public class MyCollection implements Serializable {
 
     public String removeById(String arg) throws NumberFormatException{
         int id = Integer.parseInt(arg);
-        arr.remove(id);
+        arr = arr.stream().filter(route -> route.getId() != id).collect(Collectors.toList());
         return "Element is removed";
     }
 
@@ -134,18 +136,14 @@ public class MyCollection implements Serializable {
 
     public String removeGreater(String arg) throws NumberFormatException{
         int id = Integer.parseInt(arg);
-        arr.subList(id, arr.size()).clear();
+        arr = arr.stream().filter(route -> route.getId() < id ).collect(Collectors.toList());
         return "Removed";
     }
 
 
     public String removeAllByDistance(String arg) throws NumberFormatException {
         int distance = Integer.parseInt(arg);
-        for (int i = 0; i < arr.size(); i++) {
-            if (arr.get(i).getDistance() == distance) {
-                arr.remove(i);
-            }
-        }
+        arr = arr.stream().filter(route -> route.getDistance() != distance).collect(Collectors.toList());
         return "Removed";
     }
 
